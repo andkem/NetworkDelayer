@@ -1,6 +1,15 @@
 cmake_minimum_required(VERSION 2.6)
 project(networkdelayer)
 
-add_executable(networkdelayer main.cpp)
+find_package(Boost COMPONENTS system program_options REQUIRED)
+include_directories(${Boost_INCLUDE_DIR} ${CMAKE_SOURCE_DIR})
+
+set(CMAKE_CXX_FLAGS "-std=c++11")
+
+set(SRC_FILES main.cpp server.cpp connection.cpp)
+
+add_executable(networkdelayer ${SRC_FILES})
+
+target_link_libraries(networkdelayer ${Boost_LIBRARIES})
 
 install(TARGETS networkdelayer RUNTIME DESTINATION bin)
