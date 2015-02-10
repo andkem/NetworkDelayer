@@ -23,11 +23,11 @@ networkdelayer #parameters
                       The network latency will be twice this value.
 
 Example:
-Delay network traffic on port 80 to github:
-networkdelayer --lp 8080 --ra www.github.com --rp 80 --us 1000000
+Delay network traffic on port 5678 to 192.168.1.2:
+networkdelayer --lp 8080 --ra 192.168.1.2 --rp 80 --us 100000
 
-Accessing github through the address "localhost:8080" in your webbrowser will thusly happen with a network delay
-of 1 000 000 µs (= 1 s).
+Data sent to localhost:8080 will now be directed to 192.168.1.2:80 with a network delay
+of 200 000 µs (= 200 ms).
 
 This program comes with no warranty what so ever that it'll function as described in this readme and I take no
 responsability for any damage the software may cause.
