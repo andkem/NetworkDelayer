@@ -17,7 +17,7 @@ networkdelayer #parameters
 --lp arg              The port on which to listen.
 --ra arg              Address to redirect to.
 --rp arg              Port to redirect to.
---us arg              The amount of µs to delay each full buffer of data. 
+--us arg              The number of µs to delay each full buffer of data. 
                       The network latency will be twice this value.
 
 Example:
