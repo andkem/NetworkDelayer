@@ -17,14 +17,14 @@ void parse_command_line(int argc, char **argv, po::variables_map& vm)
     ("lp", po::value<unsigned short>(), "The port on which to listen.")
     ("ra", po::value<string>(), "Address to redirect to.")
     ("rp", po::value<unsigned short>(), "Port to redirect to.")
-    ("ms", po::value<unsigned long>(), "Millisecond delay for the data.");
+    ("us", po::value<unsigned long>(), "The amount of µs to delay each byte of data.");
 
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
 
     
     if (vm.count("help") || !vm.count("lp") || !vm.count("ra") 
-        || !vm.count("rp") || !vm.count("ms"))
+        || !vm.count("rp") || !vm.count("us"))
     {
         cout << desc << "\n";
         throw invalid_argument("Missing parameters!");
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     try
     {
         boost::asio::io_service io_service;
-        server server(io_service, tcp::endpoint(tcp::v4(), vm["lp"].as<unsigned short>()), vm["ra"].as<string>(), vm["rp"].as<unsigned short>(), vm["ms"].as<unsigned long>());
+        server server(io_service, tcp::endpoint(tcp::v4(), vm["lp"].as<unsigned short>()), vm["ra"].as<string>(), vm["rp"].as<unsigned short>(), vm["us"].as<unsigned long>());
         io_service.run();
     }
     catch (std::exception& e)
