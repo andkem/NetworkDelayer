@@ -24,7 +24,7 @@ Example:
 Delay network traffic on port localhost:5678 to 192.168.1.2:80:
 networkdelayer --lp 5678 --ra 192.168.1.2 --rp 80 --us 100000
 
-Data sent to localhost:8080 will now be directed to 192.168.1.2:80 with a network delay of 200 000 µs (= 200 ms).
+Data sent to localhost:5678 will now be directed to 192.168.1.2:80 with a network delay of 200 000 µs (= 200 ms).
 
 This program comes with no warranty what so ever that it'll function as described in this readme and I take no responsability for any damage the software may cause.
 
