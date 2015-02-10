@@ -17,9 +17,7 @@ public:
     
     void start(std::string redirect_address, unsigned short redirect_port, unsigned long delay_time);
     
-private:    
-    void handle_inc_data_from_forward_host(const boost::system::error_code& error, std::size_t length);
-    void handle_inc_data_from_inc_client(const boost::system::error_code& error, std::size_t length);
+private:
     void rx_tx_data(const boost::system::error_code& error, std::size_t length, char* buffer, tcp::socket& rx_socket, tcp::socket& tx_socket);
     
     char* copy_data(const char* data, std::size_t length);

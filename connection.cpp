@@ -36,27 +36,17 @@ void connection::start(std::string redirect_address, short unsigned int redirect
         {
             incoming_socket.async_read_some(boost::asio::buffer(data_from_inc_client_buff, max_length), [this, self](const boost::system::error_code& error, std::size_t length)
             {
-                handle_inc_data_from_inc_client(error, length);
+                rx_tx_data(error, length, data_from_inc_client_buff, incoming_socket, forwarding_socket);
             });
             
             forwarding_socket.async_read_some(boost::asio::buffer(data_from_forward_host_buff, max_length), [this, self](const boost::system::error_code& error, std::size_t length)
             {
-                handle_inc_data_from_forward_host(error, length);
+                rx_tx_data(error, length, data_from_forward_host_buff, forwarding_socket, incoming_socket);
             });
         }
         else
             cleanup_on_error(error);
     });
-}
-
-void connection::handle_inc_data_from_forward_host(const boost::system::error_code& error, std::size_t length)
-{
-    rx_tx_data(error, length, data_from_forward_host_buff, forwarding_socket, incoming_socket);
-}
-
-void connection::handle_inc_data_from_inc_client(const boost::system::error_code& error, std::size_t length)
-{
-    rx_tx_data(error, length, data_from_inc_client_buff, incoming_socket, forwarding_socket);
 }
 
 void connection::rx_tx_data(const boost::system::error_code& error, std::size_t length, char* buffer, tcp::socket& rx_socket, tcp::socket& tx_socket)
