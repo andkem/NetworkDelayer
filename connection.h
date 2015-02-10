@@ -32,7 +32,7 @@ private:
     
     boost::asio::io_service& io_service;
     
-    enum { max_length = 1 };
+    enum { max_length = 1500 };
     
     char data_from_forward_host_buff[max_length];
     char data_from_inc_client_buff[max_length];

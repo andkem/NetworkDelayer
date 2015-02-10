@@ -65,7 +65,7 @@ void connection::rx_tx_data(const boost::system::error_code& error, std::size_t 
     
     if (!error)
     {
-        tx_socket.async_write_some(boost::asio::buffer(buffer, max_length), [this, self, buffer, &rx_socket, &tx_socket](const boost::system::error_code& error, std::size_t length)
+        tx_socket.async_write_some(boost::asio::buffer(buffer, length), [this, self, buffer, &rx_socket, &tx_socket](const boost::system::error_code& error, std::size_t length)
         {
             if (!error)
             {
