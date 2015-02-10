@@ -17,7 +17,7 @@ void parse_command_line(int argc, char **argv, po::variables_map& vm)
     ("lp", po::value<unsigned short>(), "The port on which to listen.")
     ("ra", po::value<string>(), "Address to redirect to.")
     ("rp", po::value<unsigned short>(), "Port to redirect to.")
-    ("us", po::value<unsigned long>(), "The amount of µs to delay each full buffer of data.");
+    ("us", po::value<unsigned long>(), "The amount of µs to delay each full buffer of data. The network latency will be twice this value.");
 
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);

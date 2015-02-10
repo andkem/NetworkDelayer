@@ -65,32 +65,36 @@ void connection::rx_tx_data(const boost::system::error_code& error, std::size_t 
     
     if (!error)
     {
-        tx_socket.async_write_some(boost::asio::buffer(buffer, length), [this, self, buffer, &rx_socket, &tx_socket](const boost::system::error_code& error, std::size_t length)
+        std::shared_ptr<boost::asio::deadline_timer> sleep_timer(new boost::asio::deadline_timer(io_service));
+        sleep_timer->expires_from_now(boost::posix_time::microseconds(delay_time));
+        
+        char* buffer_cpy = copy_data(buffer, length);
+        sleep_timer->async_wait([this, self, sleep_timer, buffer_cpy, length, &rx_socket, &tx_socket](const boost::system::error_code& error)
         {
-            if (!error)
+            tx_socket.async_write_some(boost::asio::buffer(buffer_cpy, length), [this, self, buffer_cpy, &rx_socket, &tx_socket](const boost::system::error_code& error, std::size_t length)
             {
-                std::shared_ptr<boost::asio::deadline_timer> sleep_timer(new boost::asio::deadline_timer(io_service));
-                sleep_timer->expires_from_now(boost::posix_time::microseconds(delay_time));
-                
-                sleep_timer->async_wait([this, self, sleep_timer, buffer, &rx_socket, &tx_socket](const boost::system::error_code& error)
-                {
-                    if (!error)
-                    {
-                        rx_socket.async_read_some(boost::asio::buffer(buffer, max_length), [this, self, buffer, &rx_socket, &tx_socket](const boost::system::error_code& error, std::size_t length)
-                        {
-                                rx_tx_data(error, length, buffer, rx_socket, tx_socket);
-                        });
-                    }
-                    else
-                        cleanup_on_error(error);
-                });
-            }
-            else
-                cleanup_on_error(error);
+                delete[] buffer_cpy;
+                if (error)
+                    cleanup_on_error(error);
+            });
+        });
+        
+        rx_socket.async_read_some(boost::asio::buffer(buffer, max_length), [this, self, buffer, &rx_socket, &tx_socket](const boost::system::error_code& error, std::size_t length)
+        {
+            rx_tx_data(error, length, buffer, rx_socket, tx_socket);
         });
     }
     else
         cleanup_on_error(error);
+}
+
+char* connection::copy_data(const char* data, std::size_t length)
+{
+    char* tmp = new char[length];
+    
+    memcpy(tmp, data, length);
+    
+    return tmp;
 }
 
 void connection::cleanup_on_error(const boost::system::error_code& error)
