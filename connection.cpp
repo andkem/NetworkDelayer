@@ -1,6 +1,7 @@
 #include "connection.h"
 
 #include <sstream>
+#include <iostream>
 
 #include <boost/bind.hpp>
 
